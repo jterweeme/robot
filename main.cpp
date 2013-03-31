@@ -111,7 +111,11 @@ void * operator new (size_t size)
 int main()
 {
     
-    motor = new Motor();
+    motor = new PWMMotor();
+    //motor->linksVooruit();
+    //motor->linksAchteruit();
+    //motor->rechtsVooruit();
+    //motor->rechtsAchteruit();
     robot = new Robot();
     debugPort = new Serial0();
     wifly = new WiFly();   
