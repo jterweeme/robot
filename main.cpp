@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 #include "serial.h"
 #include "motor.h"
 #include "wifly.h"
@@ -19,8 +20,69 @@ public:
     virtual void showNetworks() = 0;
 };
 
+class Robot
+{
+public:
+    Robot();
+    void command(const char *);
+};
+
+Robot::Robot()
+{
+    DDRB |= (1<<7);
+}
+
+Motor *motor;
 Serial0 *debugPort;
+
+const char *sjprintf(const char *s, ...)
+{
+    va_list arg;
+    va_start(arg, s);
+    static char onzin[100];
+    vsprintf(onzin, s, arg);
+    va_end(arg);
+    return onzin;
+}
+
+void Robot::command(const char *cmd)
+{
+    PORTB ^= (1<<7);
+
+
+    for (int i = 0; i < strlen(cmd); i++)
+        debugPort->puts(sjprintf("%02x", cmd[i]));
+
+
+    if (strcmp(cmd, "\nvooruit") == 0 || strcmp(cmd, "vooruit") == 0)
+    {
+        motor->linksVooruit();
+        motor->rechtsVooruit();
+    }
+    if (strcmp(cmd, "\nachteruit") == 0)
+    {
+        motor->linksAchteruit();
+        motor->rechtsAchteruit();
+    }
+    if (strcmp(cmd, "\nstop") == 0)
+    {
+        motor->linksStop();
+        motor->rechtsStop();
+    }
+    if (strcmp(cmd, "\nlinks") == 0)
+    {
+        motor->rechtsVooruit();
+        motor->linksStop();
+    }
+    if (strcmp(cmd, "\nrechts") == 0)
+    {
+        motor->linksVooruit();
+        motor->rechtsStop();
+    }
+}
+
 WiFly *wifly;
+Robot *robot;
 
 extern "C" void __vector_25() __attribute__ ((signal, __INTR_ATTRS));
 extern "C" void __vector_36() __attribute__ ((signal, __INTR_ATTRS));
@@ -35,8 +97,9 @@ void __vector_25()
 void __vector_36()
 {
     char data = UDR1;
-    debugPort->putcee(data);
-    //wifly->addToBuffer(data);
+
+    if (wifly->addToBuffer(data) == 1)
+        robot->command(wifly->getBuffer());
 
 }
 
@@ -47,14 +110,11 @@ void * operator new (size_t size)
 
 int main()
 {
-    Motor motor;
-    //motor.linksAchteruit();
-    //motor.rechtsAchteruit();
+    
+    motor = new Motor();
+    robot = new Robot();
     debugPort = new Serial0();
     wifly = new WiFly();   
-    //wifly->commandMode();
-    //wifly->setPhrase("hutspot89xyz");
-    //wifly->join("ABCDEFGHIJK");
 
     
     while (true) {
