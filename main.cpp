@@ -7,18 +7,7 @@
 #include "serial.h"
 #include "motor.h"
 #include "wifly.h"
-
-extern "C" void __cxa_pure_virtual()
-{
-    while (true) {
-    }
-}
-
-class Wifi
-{
-public:
-    virtual void showNetworks() = 0;
-};
+#include "misc.h"
 
 class Robot
 {
@@ -101,11 +90,6 @@ void __vector_36()
     if (wifly->addToBuffer(data) == 1)
         robot->command(wifly->getBuffer());
 
-}
-
-void * operator new (size_t size)
-{
-    return malloc(size);
 }
 
 int main()
