@@ -2,6 +2,8 @@
 #include "wifly.h"
 WiFly::WiFly()
 {
+    buffer_ptr = 0;
+    last_buffer_ptr = 0;
 }
 
 void WiFly::showNetworks()
@@ -41,4 +43,24 @@ void WiFly::join(const char *ssid)
     puts("join\r");
 }
 
+const char *WiFly::getBuffer()
+{
+    return buffer;
+}
+
+int WiFly::addToBuffer(char c)
+{
+    if (c == '\r')
+    {
+        buffer[buffer_ptr] = 0;
+        last_buffer_ptr = buffer_ptr;
+        buffer_ptr = 0;
+        return 1;
+    }
+
+    buffer[buffer_ptr] = c;
+    buffer_ptr++;
+    return 0;
+    
+}
 

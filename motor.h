@@ -8,6 +8,8 @@ public:
     void linksAchteruit();
     void rechtsAchteruit();
     void rechtsVooruit();
+    void linksStop();
+    void rechtsStop();
 };
 #endif
 

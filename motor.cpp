@@ -28,3 +28,14 @@ void Motor::rechtsVooruit()
     PORTH |= (1<<3);
 }
 
+void Motor::linksStop()
+{
+    PORTE &= ~(1<<3);
+}
+
+void Motor::rechtsStop()
+{
+    PORTH &= ~(1<<3);
+}
+
+
