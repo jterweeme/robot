@@ -112,17 +112,13 @@ int main()
 {
     
     motor = new PWMMotor();
-    //motor->linksVooruit();
-    //motor->linksAchteruit();
-    //motor->rechtsVooruit();
-    //motor->rechtsAchteruit();
     robot = new Robot();
     debugPort = new Serial0();
     wifly = new WiFly();   
 
-    
     while (true) {
     }
+
     return 0;
 }
 
