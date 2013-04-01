@@ -1,30 +1,19 @@
 #ifndef _MOTOR_H_
 #define _MOTOR_H_
 
-class Motor
-{
-public:
-    virtual void linksVooruit() = 0;
-    virtual void linksAchteruit() = 0;
-    virtual void rechtsAchteruit() = 0;
-    virtual void rechtsVooruit() = 0;
-    virtual void linksStop() = 0;
-    virtual void rechtsStop() = 0;
-};
-
-class PWMMotor : public Motor
+class PWMMotor
 {
 public:
     PWMMotor();
-    void linksVooruit();
-    void linksAchteruit();
-    void rechtsAchteruit();
-    void rechtsVooruit();
+    void linksVooruit(unsigned int);
+    void linksAchteruit(unsigned int);
+    void rechtsAchteruit(unsigned int);
+    void rechtsVooruit(unsigned int);
     void linksStop();
     void rechtsStop();
 };
 
-class PWMPLLMotor : public Motor
+class PWMPLLMotor
 {
 public:
     PWMPLLMotor();

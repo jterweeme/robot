@@ -21,8 +21,10 @@ Robot::Robot()
     DDRB |= (1<<7);
 }
 
-Motor *motor;
+PWMMotor *motor;
 Serial0 *debugPort;
+WiFly *wifly;
+Robot *robot;
 
 const char *sjprintf(const char *s, ...)
 {
@@ -36,42 +38,23 @@ const char *sjprintf(const char *s, ...)
 
 void Robot::command(const char *cmd)
 {
-    PORTB ^= (1<<7);
+    char *commando = strtok((char *)cmd, " ,.-\n");
+    char *parameter = strtok(NULL, " ,.-");
+    unsigned int speed = atoi(parameter);
 
+    if (strcmp(commando, "linksachter") == 0)
+        motor->linksAchteruit(speed);
+    
+    if (strcmp(commando, "linksvoor") == 0)
+        motor->linksVooruit(speed);
 
-    for (int i = 0; i < strlen(cmd); i++)
-        debugPort->puts(sjprintf("%02x", cmd[i]));
+    if (strcmp(commando, "rechtsvoor") == 0)
+        motor->rechtsVooruit(speed);
 
-
-    if (strcmp(cmd, "\nvooruit") == 0 || strcmp(cmd, "vooruit") == 0)
-    {
-        motor->linksVooruit();
-        motor->rechtsVooruit();
-    }
-    if (strcmp(cmd, "\nachteruit") == 0)
-    {
-        motor->linksAchteruit();
-        motor->rechtsAchteruit();
-    }
-    if (strcmp(cmd, "\nstop") == 0)
-    {
-        motor->linksStop();
-        motor->rechtsStop();
-    }
-    if (strcmp(cmd, "\nlinks") == 0)
-    {
-        motor->rechtsVooruit();
-        motor->linksStop();
-    }
-    if (strcmp(cmd, "\nrechts") == 0)
-    {
-        motor->linksVooruit();
-        motor->rechtsStop();
-    }
+    if (strcmp(commando, "rechtsachter") == 0)
+        motor->rechtsAchteruit(speed);
 }
 
-WiFly *wifly;
-Robot *robot;
 
 extern "C" void __vector_25() __attribute__ ((signal, __INTR_ATTRS));
 extern "C" void __vector_36() __attribute__ ((signal, __INTR_ATTRS));

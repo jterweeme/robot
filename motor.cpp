@@ -43,36 +43,37 @@ PWMMotor::PWMMotor()
     DDRE = 0xff;
     DDRG = 0xff;
     DDRH = 0xff;
-    //ICR4 = 10000;
+    ICR3 = 10000;
+    ICR4 = 10000;
     TCNT3 = 0;
     TCCR3A = (1<<COM3A1);
-    TCCR4A = (1<<COM4A1) | (1<<WGM40);
+    TCCR4A = (1<<COM4A1);
     TCCR3B = (1<<WGM33) | (1<<CS32);
-    TCCR4B = (1<<CS42) | (1<<WGM42);
+    TCCR4B = (1<<CS42) | (1<<WGM43);
 }
 
-void PWMMotor::linksAchteruit()
+void PWMMotor::linksAchteruit(unsigned int speed)
 {
     PORTG |= (1<<5);
-    OCR3A = 1;
+    OCR3A = speed;
 }
 
-void PWMMotor::linksVooruit()
+void PWMMotor::linksVooruit(unsigned int speed)
 {
     PORTG &= ~(1<<5);
-    OCR3A = 1;
+    OCR3A = speed;
 }
 
-void PWMMotor::rechtsAchteruit()
+void PWMMotor::rechtsAchteruit(unsigned int speed)
 {
     PORTH |= (1<<4);
-    OCR4A = 1;
+    OCR4A = speed;
 }
 
-void PWMMotor::rechtsVooruit()
+void PWMMotor::rechtsVooruit(unsigned int speed)
 {
     PORTH &= ~(1<<4);
-    OCR4A = 30000;
+    OCR4A = speed;
 }
 
 void PWMMotor::linksStop()
