@@ -38,20 +38,22 @@ const char *sjprintf(const char *s, ...)
 
 void Robot::command(const char *cmd)
 {
+    debugPort->puts(sjprintf("%02x", cmd);
+
     char *commando = strtok((char *)cmd, " ,.-\n");
     char *parameter = strtok(NULL, " ,.-");
     unsigned int speed = atoi(parameter);
 
-    if (strcmp(commando, "linksachter") == 0)
+    if (strcmp(commando, "A") == 0)
         motor->linksAchteruit(speed);
     
-    if (strcmp(commando, "linksvoor") == 0)
+    if (strcmp(commando, "Q") == 0)
         motor->linksVooruit(speed);
 
-    if (strcmp(commando, "rechtsvoor") == 0)
+    if (strcmp(commando, "W") == 0)
         motor->rechtsVooruit(speed);
 
-    if (strcmp(commando, "rechtsachter") == 0)
+    if (strcmp(commando, "S") == 0)
         motor->rechtsAchteruit(speed);
 }
 
