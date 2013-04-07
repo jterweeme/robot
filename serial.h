@@ -3,7 +3,8 @@
 class Serial
 {
 public:
-    virtual void puts(const char *) = 0;
+    //void puts(const char *);
+    //virtual void putcee(char) = 0;
 };
 
 class Serial0 : public Serial
@@ -18,11 +19,29 @@ class Serial1 : public Serial
 {
 public:
     Serial1();
-    void puts(const char *);
     void putcee(char);
+    void puts(const char *);
+
     void bogus();
 };
 
+class Serial2 : public Serial
+{
+public:
+    Serial2();
+    void putcee(char);
+    void puts(const char *);
+
+};
+
+class Serial3 : public Serial
+{
+public:
+    Serial3();
+    void putcee(char);
+    void puts(const char *);
+
+};
 
 #endif
 
