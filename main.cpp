@@ -13,16 +13,16 @@ Jasper ter Weeme
 #include "wifly.h"
 #include "misc.h"
 #include "ulcd.h"
-#include "sonic.h"
 
-extern "C" void __vector_25() __attribute__ ((signal, __INTR_ATTRS));
-extern "C" void __vector_36() __attribute__ ((signal, __INTR_ATTRS));
+extern "C" void __vector_25() __attribute__ ((signal, used, externally_visible));
+extern "C" void __vector_36() __attribute__ ((signal, used, externally_visible));
+extern "C" void __vector_51() __attribute__ ((signal, used, externally_visible));
 
 class Robot
 {
 public:
     Robot();
-    void command(const char *);
+    static void command(const char *);
 };
 
 Robot::Robot()
@@ -34,58 +34,7 @@ Motor *motor;
 Serial0 *debugPort;
 WiFly *wifly;
 Robot *robot;
-Sonic *sonic;
 uLCD *ulcd;
-
-Sonic::Sonic()
-{
-    bufferPointer = 0;
-    header = 0;
-    highbyte = 0;
-    lowbyte = 0;
-    sum = 0;
-}
-
-uint8_t Sonic::getDistance()
-{
-    return lowbyte;
-}
-
-void Sonic::requestDistance()
-{
-    uint8_t onzin[4] = { 0x22, 0, 0, 0x22 };
-
-    for (int i = 0; i < 4; i++)
-        this->putcee(onzin[i]);
-}
-
-void Sonic::addToBuffer(char c)
-{
-    bufferPointer++;
-
-    switch (bufferPointer)
-    {
-    case 1:
-        header = (int)c;
-        break;
-    case 2:
-        highbyte = (int)c;
-        break;
-    case 3:
-        lowbyte = (int)c;
-        break;
-    case 4:
-        sum = (int)c;
-        break;
-    default:
-        bufferPointer = 0;
-        break;
-    }
-
-    debugPort->putcee(c);
-    debugPort->putcee('\n');
-    
-}
 
 void Robot::command(const char *cmd)
 {
@@ -110,8 +59,8 @@ void Robot::command(const char *cmd)
 
     if (strcmp(commando, "US") == 0)
     {
-        sonic->requestDistance();
-        debugPort->puts(sjprintf("%dcm\n", sonic->getDistance()));
+        //sonic->requestDistance();
+        //debugPort->puts(sjprintf("%dcm\n", sonic->getDistance()));
     }
         
 }
@@ -130,13 +79,17 @@ void __vector_36()
     char data = UDR1;
 
     if (wifly->addToBuffer(data) == 1)
-        robot->command(wifly->getBuffer());
+        Robot::command(wifly->getBuffer());
+}
+
+void __vector_51()
+{
+    char data = UDR2;
 }
 
 int main()
 {
-    
-    motor = new PWMPLLMotor();
+    motor = new PWMMotor();
     robot = new Robot();
     debugPort = new Serial0();
     wifly = new WiFly();
