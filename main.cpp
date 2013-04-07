@@ -1,3 +1,7 @@
+/*
+Jasper ter Weeme
+*/
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <string.h>
@@ -8,26 +12,11 @@
 #include "motor.h"
 #include "wifly.h"
 #include "misc.h"
+#include "ulcd.h"
+#include "sonic.h"
 
 extern "C" void __vector_25() __attribute__ ((signal, __INTR_ATTRS));
 extern "C" void __vector_36() __attribute__ ((signal, __INTR_ATTRS));
-//extern "C" void __vector_54() __attribute__ ((signal, __INTR_ATTRS));
-
-class Sonic : public Serial3
-{
-public:
-    Sonic();
-    uint8_t getDistance();
-    void requestDistance();
-    void setDistance(uint8_t distance);
-    void addToBuffer(char);
-private:
-    int bufferPointer;
-    int header;
-    int highbyte;
-    int lowbyte;
-    int sum;
-};
 
 class Robot
 {
@@ -41,21 +30,12 @@ Robot::Robot()
     DDRB |= (1<<7);
 }
 
-PWMMotor *motor;
+Motor *motor;
 Serial0 *debugPort;
 WiFly *wifly;
 Robot *robot;
 Sonic *sonic;
-
-const char *sjprintf(const char *s, ...)
-{
-    va_list arg;
-    va_start(arg, s);
-    static char onzin[100];
-    vsprintf(onzin, s, arg);
-    va_end(arg);
-    return onzin;
-}
+uLCD *ulcd;
 
 Sonic::Sonic()
 {
@@ -147,29 +127,22 @@ void __vector_25()
 
 void __vector_36()
 {
-    //PORTB ^= (1<<7);
     char data = UDR1;
 
     if (wifly->addToBuffer(data) == 1)
         robot->command(wifly->getBuffer());
 }
 
-/*
-void __vector__54()
-{
-    PORTB ^= (1<<7);
-    char data = UDR2;
-    sonic->addToBuffer(data);
-}*/
-
 int main()
 {
     
-    motor = new PWMMotor();
+    motor = new PWMPLLMotor();
     robot = new Robot();
     debugPort = new Serial0();
     wifly = new WiFly();
-    //sonic = new Sonic();
+    ulcd = new uLCD();
+
+    ulcd->puts("Beware of the mighty Stendor robot");
 
     while (true) {
     }

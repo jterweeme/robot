@@ -7,7 +7,7 @@ public:
     //virtual void putcee(char) = 0;
 };
 
-class Serial0 : public Serial
+class Serial0 //: public Serial
 {
 public:
     Serial0();
@@ -15,7 +15,7 @@ public:
     void putcee(char);
 };
 
-class Serial1 : public Serial
+class Serial1 //: public Serial
 {
 public:
     Serial1();
@@ -25,7 +25,7 @@ public:
     void bogus();
 };
 
-class Serial2 : public Serial
+class Serial2 //: public Serial
 {
 public:
     Serial2();
@@ -34,7 +34,7 @@ public:
 
 };
 
-class Serial3 : public Serial
+class Serial3 //: public Serial
 {
 public:
     Serial3();

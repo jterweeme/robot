@@ -1,7 +1,19 @@
 #ifndef _MOTOR_H_
 #define _MOTOR_H_
+#include "misc.h"
 
-class PWMMotor
+class Motor
+{
+public:
+    virtual void linksVooruit(unsigned int) = 0;
+    virtual void linksAchteruit(unsigned int) = 0;
+    virtual void rechtsAchteruit(unsigned int) = 0;
+    virtual void rechtsVooruit(unsigned int) = 0;
+    virtual void linksStop() = 0;
+    virtual void rechtsStop() = 0;
+};
+
+class PWMMotor : public Motor
 {
 public:
     PWMMotor();
@@ -13,14 +25,14 @@ public:
     void rechtsStop();
 };
 
-class PWMPLLMotor
+class PWMPLLMotor : public Motor
 {
 public:
     PWMPLLMotor();
-    void linksVooruit();
-    void linksAchteruit();
-    void rechtsAchteruit();
-    void rechtsVooruit();
+    void linksVooruit(unsigned int);
+    void linksAchteruit(unsigned int);
+    void rechtsAchteruit(unsigned int);
+    void rechtsVooruit(unsigned int);
     void linksStop();
     void rechtsStop();
 };

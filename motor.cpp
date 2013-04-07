@@ -1,3 +1,7 @@
+/*
+Jasper ter Weeme
+*/
+
 #include <avr/io.h>
 #include "motor.h"
 PWMPLLMotor::PWMPLLMotor()
@@ -7,25 +11,41 @@ PWMPLLMotor::PWMPLLMotor()
     DDRH |= (1<<3) | (1<<4);
 }
 
-void PWMPLLMotor::linksAchteruit()
+void PWMPLLMotor::linksAchteruit(unsigned int speed = 0)
 {
-    PORTE |= (1<<3);
-    PORTG |= (1<<5);
+    if (speed > 0)
+    {
+        PORTE |= (1<<3);
+        PORTG |= (1<<5);
+    }
+    else
+    {
+        linksStop();
+    }
 }
 
-void PWMPLLMotor::linksVooruit()
+void PWMPLLMotor::linksVooruit(unsigned int speed = 0)
 {
-    PORTE |= (1<<3);
+    if (speed > 0)
+        PORTE |= (1<<3);
+    else
+        linksStop();
 }
 
-void PWMPLLMotor::rechtsAchteruit()
+void PWMPLLMotor::rechtsAchteruit(unsigned int speed = 0)
 {
-    PORTH |= (1<<3) | (1<<4);
+    if (speed > 0)
+        PORTH |= (1<<3) | (1<<4);
+    else
+        rechtsStop();
 }
 
-void PWMPLLMotor::rechtsVooruit()
+void PWMPLLMotor::rechtsVooruit(unsigned int speed = 0)
 {
-    PORTH |= (1<<3);
+    if (speed > 0)
+        PORTH |= (1<<3);
+    else
+        rechtsStop();
 }
 
 void PWMPLLMotor::linksStop()
