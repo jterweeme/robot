@@ -9,7 +9,7 @@ main: main.o serial.o motor.o wifly.o ulcd.o misc.o
 main.o: main.cpp
 	avr-g++ -c -O2 -mmcu=atmega2560 -o $@ $<
 
-serial.o: serial.cpp
+serial.o: serial.cpp serial.h
 	avr-g++ -c -O2 -mmcu=atmega2560 -o $@ $<
 
 motor.o: motor.cpp motor.h

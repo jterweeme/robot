@@ -2,8 +2,15 @@
 #include <avr/interrupt.h>
 #include <string.h>
 #include "serial.h"
+
+Serial::Serial()
+{
+}
+
 Serial0::Serial0()
 {
+    UCSRXA = (volatile uint8_t *)0xc0;
+    UDRX   = (volatile uint8_t *)0xc6;
     UBRR0L = 25;
     UCSR0A &= ~(1<<U2X0);
     UCSR0B = (1<<TXEN0) | (1<<RXEN0) | (1<<RXCIE0);
@@ -13,6 +20,8 @@ Serial0::Serial0()
 
 Serial1::Serial1()
 {
+    UCSRXA = (volatile uint8_t *)0xc8;
+    UDRX   = (volatile uint8_t *)0xce;
     UBRR1L = 103;
     UCSR1A &= ~(1<<U2X1);
     UCSR1B = (1<<TXEN1) | (1<<RXEN1) | (1<<RXCIE1);
@@ -22,6 +31,8 @@ Serial1::Serial1()
 
 Serial2::Serial2()
 {
+    UCSRXA = (volatile uint8_t *)0xd0;
+    UDRX   = (volatile uint8_t *)0xd6;
     UBRR2L = 103;
     UCSR2A &= ~(1<<U2X2);
     UCSR2B = (1<<TXEN2) | (1<<RXEN2) | (1<<RXCIE2);
@@ -46,37 +57,12 @@ void Serial::puts(const char *s)
     }
 }
 
-void Serial0::putcee(char c)
+void Serial::putcee(char c)
 {
-    while (!(UCSR0A & (1<<UDRE0))) {
+    while (!(*UCSRXA & (1<<5))) {
     }
 
-    UDR0 = c;
+    *UDRX = c;
 }
-
-void Serial1::putcee(char c)
-{
-    while (!(UCSR1A & (1<<UDRE1))) {
-    }
-
-    UDR1 = c;
-}
-
-void Serial2::putcee(char c)
-{
-    while (!(UCSR2A & (1<<UDRE2))) {
-    }
-
-    UDR2 = c;
-}
-
-void Serial3::putcee(char c)
-{
-    while (!(UCSR3A & (1<<UDRE3))) {
-    }
-
-    UDR3 = c;
-}
-
 
 
