@@ -27,7 +27,6 @@ public:
 
 Robot::Robot()
 {
-    DDRB |= (1<<7);
 }
 
 Motor *motor;
@@ -84,7 +83,9 @@ void __vector_36()
 
 void __vector_51()
 {
-    char data = UDR2;
+    char ack = UDR2;
+    debugPort->putcee(ack);
+    ulcd->setResponse(ack);
 }
 
 int main()
@@ -93,9 +94,17 @@ int main()
     robot = new Robot();
     debugPort = new Serial0();
     wifly = new WiFly();
-    ulcd = new uLCD();
 
-    ulcd->puts("Beware of the mighty Stendor robot");
+/*
+    for (volatile unsigned long int i = 0; i < 0xfffff; i++) {
+    } */
+
+    //debugPort->puts("debug bericht"); 
+
+
+    //ulcd = new uLCD();
+
+    //ulcd->puts("Beware of the mighty Stendor robot");
 
     while (true) {
     }

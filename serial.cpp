@@ -38,6 +38,7 @@ Serial3::Serial3()
     sei();
 }
 
+// moet verbeterd worden
 void Serial0::puts(const char *s)
 {
     for (int i = 0; i < strlen(s); ++i)

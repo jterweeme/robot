@@ -3,33 +3,64 @@
 #include <avr/io.h>
 uLCD::uLCD()
 {
+    DDRB |= (1<<7);
     init();
+}
+
+int uLCD::fetchResponse()
+{
+    unsigned int timeout = 0;
+
+    while (this->response != 6 || this->response != 0x15)
+    {
+        if (++timeout > 0xfffe)
+            break;
+    }
+
+    if (this->response == 6)
+        return 0;
+    else
+        return -1;
 }
 
 void uLCD::init()
 {
-    DDRB |= (1<<6);
-    PORTB &= ~(1<<6);
     Serial2::putcee('U');
+    int status = fetchResponse();
 
-    Serial2::putcee('B');
-    Serial2::putcee(0xff);
-    Serial2::putcee(0xff);
+    if (status >= 0)
+        PORTB |= (1<<7);
 
-    Serial2::puts("Y\4\1");
+    //status = setBackground(WHITE);
+    
 
+   
     clear();
 }
 
 int uLCD::landscape()
 {
+    Serial2::puts("Y\4\1");
     return 0;
+}
+
+int uLCD::setBackground(unsigned int color)
+{
+    Serial2::putcee('B');
+    Serial2::putcee(0xff);
+    Serial2::putcee(0xff);
+    return fetchResponse();
 }
 
 int uLCD::clear()
 {
     Serial2::putcee('E');
-    return 0;
+    return fetchResponse();
+}
+
+void uLCD::setResponse(uint8_t resp)
+{
+    this->response = resp;
 }
 
 int uLCD::puts(const char *s)
