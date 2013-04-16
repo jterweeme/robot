@@ -27,25 +27,37 @@ void PWMPLLMotor::linksAchteruit(unsigned int speed = 0)
 void PWMPLLMotor::linksVooruit(unsigned int speed = 0)
 {
     if (speed > 0)
+    {
         PORTE |= (1<<3);
+    }
     else
+    {
         linksStop();
+    }
 }
 
 void PWMPLLMotor::rechtsAchteruit(unsigned int speed = 0)
 {
     if (speed > 0)
+    {
         PORTH |= (1<<3) | (1<<4);
+    }
     else
+    {
         rechtsStop();
+    }
 }
 
 void PWMPLLMotor::rechtsVooruit(unsigned int speed = 0)
 {
     if (speed > 0)
+    {
         PORTH |= (1<<3);
+    }
     else
+    {
         rechtsStop();
+    }
 }
 
 void PWMPLLMotor::linksStop()

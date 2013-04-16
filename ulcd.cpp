@@ -14,13 +14,19 @@ int uLCD::fetchResponse()
     while (this->response != 6 || this->response != 0x15)
     {
         if (++timeout > 0xfffe)
+        {
             break;
+        }
     }
 
     if (this->response == 6)
+    {
         return 0;
+    }
     else
+    {
         return -1;
+    }
 }
 
 void uLCD::init()
@@ -29,7 +35,9 @@ void uLCD::init()
     int status = fetchResponse();
 
     if (status >= 0)
+    {
         PORTB |= (1<<7);
+    }
 
     //status = setBackground(WHITE);
     

@@ -17,7 +17,9 @@ void Sonic::requestDistance()
     uint8_t onzin[4] = { 0x22, 0, 0, 0x22 };
 
     for (int i = 0; i < 4; i++)
+    {
         this->putcee(onzin[i]);
+    }
 }
 
 void Sonic::addToBuffer(char c)

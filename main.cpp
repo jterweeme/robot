@@ -45,16 +45,24 @@ void Robot::command(const char *cmd)
     unsigned int speed = atoi(parameter);
 
     if (strcmp(commando, "A") == 0)
+    {
         motor->linksAchteruit(speed);
+    }
     
     if (strcmp(commando, "Q") == 0)
+    {
         motor->linksVooruit(speed);
+    }
 
     if (strcmp(commando, "W") == 0)
+    {
         motor->rechtsVooruit(speed);
+    }
 
     if (strcmp(commando, "S") == 0)
+    {
         motor->rechtsAchteruit(speed);
+    }
 
     if (strcmp(commando, "US") == 0)
     {
