@@ -3,7 +3,6 @@
 #include <avr/io.h>
 uLCD::uLCD()
 {
-    DDRB |= (1<<7);
     init();
 }
 

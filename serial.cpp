@@ -38,33 +38,11 @@ Serial3::Serial3()
     sei();
 }
 
-// moet verbeterd worden
-void Serial0::puts(const char *s)
+void Serial::puts(const char *s)
 {
-    for (int i = 0; i < strlen(s); ++i)
+    while (*s)
     {
-        putcee(s[i]);
-    }
-}
-void Serial1::puts(const char *s)
-{
-    for (int i = 0; i < strlen(s); ++i)
-    {
-        putcee(s[i]);
-    }
-}
-void Serial2::puts(const char *s)
-{
-    for (int i = 0; i < strlen(s); ++i)
-    {
-        putcee(s[i]);
-    }
-}
-void Serial3::puts(const char *s)
-{
-    for (int i = 0; i < strlen(s); ++i)
-    {
-        putcee(s[i]);
+        putcee(*s++);
     }
 }
 
@@ -98,12 +76,6 @@ void Serial3::putcee(char c)
     }
 
     UDR3 = c;
-}
-
-
-void Serial1::bogus()
-{
-    puts("onzin\r");
 }
 
 
